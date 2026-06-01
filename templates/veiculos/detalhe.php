@@ -1,29 +1,44 @@
-<?php // templates/veiculos/detalhe.php ?>
-<!DOCTYPE html>
-<html lang="pt">
-<head>
+<?php // templates/veiculos/detalhe.php
+// Inclui o cabeçalho da página (cria templates/header.php reutilizável)
+?>
+<!DOCTYPE html><html lang="pt"><head>
     <meta charset="UTF-8">
-    <title><?= htmlspecialchars($titulo) ?></title>
+    <title><?= htmlspecialchars($titulo) ?> — AutoShop</title>
+    <link rel="stylesheet" href="/css/estilo.css">
     <style>
-        body { font-family: Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; }
-        .card { border: 1px solid #ddd; border-radius: 8px; overflow: hidden; }
-        .card img { width: 100%; max-height: 420px; object-fit: cover; background: #eee; }
-        .content { padding: 18px; }
-        .preco { font-size: 1.5rem; font-weight: bold; color: #1565C0; }
-        .back { display: inline-block; margin-top: 18px; color: #1565C0; text-decoration: none; }
+        .topo { display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap; }
+        .carrinho-link { color:#1565C0; text-decoration:none; font-weight:bold; }
     </style>
-</head>
-<body>
-    <div class="card">
-        <img src="<?= !empty($veiculo['imagem']) ? '/uploads/' . htmlspecialchars($veiculo['imagem']) : '/img/placeholder.png' ?>"
-             alt="<?= htmlspecialchars($veiculo['marca'] . ' ' . $veiculo['modelo']) ?>">
-        <div class="content">
-            <h1><?= htmlspecialchars($veiculo['marca'] . ' ' . $veiculo['modelo']) ?></h1>
-            <p><?= (int) $veiculo['ano'] ?> | <?= number_format((float) $veiculo['quilometros'], 0, '.', '.') ?> km | <?= htmlspecialchars($veiculo['combustivel']) ?></p>
-            <p class="preco"><?= number_format((float) $veiculo['preco'], 2, ',', '.') ?> EUR</p>
-            <p><?= nl2br(htmlspecialchars($veiculo['descricao'] ?? 'Sem descricao disponivel.')) ?></p>
-            <a class="back" href="/">Voltar ao catalogo</a>
-        </div>
+</head><body>
+    <?php require __DIR__ . '/../header.php'; ?>
+    <div class="topo">
+        <a href="<?= htmlspecialchars(app_url('')) ?>">← Voltar ao catálogo</a>
     </div>
-</body>
-</html>
+    <h1><?= htmlspecialchars($veiculo['marca'].' '.$veiculo['modelo']) ?></h1>
+ 
+    <img src="<?= htmlspecialchars(app_url('uploads/' . ($veiculo['imagem'] ?? 'placeholder.png'))) ?>"
+         alt="" style="max-width:600px; border-radius:8px;">
+ 
+    <table>
+        <tr><th>Marca</th>      <td><?= htmlspecialchars($veiculo['marca']) ?></td></tr>
+        <tr><th>Modelo</th>     <td><?= htmlspecialchars($veiculo['modelo']) ?></td></tr>
+        <tr><th>Ano</th>        <td><?= $veiculo['ano'] ?></td></tr>
+        <tr><th>Quilómetros</th><td><?= number_format($veiculo['quilometros'],0,'.','.') ?> km</td></tr>
+        <tr><th>Combustível</th><td><?= htmlspecialchars($veiculo['combustivel']) ?></td></tr>
+        <?php if($veiculo['cilindrada']): ?>
+        <tr><th>Cilindrada</th><td><?= htmlspecialchars($veiculo['cilindrada']) ?></td></tr>
+        <?php endif ?>
+        <tr><th>Preço</th>      <td><strong><?= number_format($veiculo['preco'],2,',','.') ?> €</strong></td></tr>
+    </table>
+ 
+    <?php if ($veiculo['descricao']): ?>
+        <h3>Descrição</h3>
+        <p><?= nl2br(htmlspecialchars($veiculo['descricao'])) ?></p>
+    <?php endif ?>
+ 
+    <form method="POST" action="<?= htmlspecialchars(app_url('carrinho/adicionar')) ?>">
+        <input type="hidden" name="veiculo_id" value="<?= $veiculo['id'] ?>">
+        <input type="hidden" name="csrf_token" value="<?= csrf_token() ?>">
+        <button type="submit">🛒 Adicionar à lista de reservas</button>
+    </form>
+</body></html>

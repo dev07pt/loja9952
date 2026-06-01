@@ -18,10 +18,19 @@
         .preco { font-size:1.3rem; font-weight:bold; color:#1565C0; }
         .detalhe { display:inline-block; margin-top:10px; background:#1565C0; color:#fff;
                    padding:7px 14px; border-radius:4px; text-decoration:none; font-size:.9rem; }
+        .adicionar { display:inline-block; margin-top:10px; background:#2e7d32; color:#fff;
+                     padding:7px 14px; border:none; border-radius:4px; cursor:pointer; font-size:.9rem; }
+        .acoes { display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-top:6px; }
+        .topo { display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap; }
+        .carrinho-link { color:#1565C0; text-decoration:none; font-weight:bold; }
     </style>
 </head>
 <body>
-    <h1>AutoShop - Catalogo de Veiculos</h1>
+    <?php require __DIR__ . '/../header.php'; ?>
+
+    <div class="topo">
+        <h1>AutoShop - Catalogo de Veiculos</h1>
+    </div>
 
     <form class="filtros" method="GET" action="">
         <select name="marca_id">
@@ -46,7 +55,7 @@
         <input type="text" name="pesquisa" placeholder="Pesquisar modelo..."
                value="<?= htmlspecialchars($_GET['pesquisa'] ?? '') ?>">
         <button type="submit">Filtrar</button>
-        <a href="/" style="padding:8px 14px;color:#555;text-decoration:none;">Limpar</a>
+        <a href="<?= htmlspecialchars(app_url('')) ?>" style="padding:8px 14px;color:#555;text-decoration:none;">Limpar</a>
     </form>
 
     <p><?= count($veiculos) ?> veiculo(s) encontrado(s)</p>
@@ -57,13 +66,20 @@
     <div class="grelha">
     <?php foreach ($veiculos as $v): ?>
         <div class="card">
-            <img src="<?= !empty($v['imagem']) ? '/uploads/' . htmlspecialchars($v['imagem']) : '/img/placeholder.png' ?>"
+            <img src="<?= !empty($v['imagem']) ? app_url('uploads/' . $v['imagem']) : app_url('img/placeholder.png') ?>"
                  alt="<?= htmlspecialchars($v['marca'] . ' ' . $v['modelo']) ?>">
             <div class="card-body">
                 <h3><?= htmlspecialchars($v['marca'] . ' ' . $v['modelo']) ?></h3>
                 <p><?= (int) $v['ano'] ?> | <?= number_format((float) $v['quilometros'], 0, '.', '.') ?> km | <?= htmlspecialchars($v['combustivel']) ?></p>
                 <div class="preco"><?= number_format((float) $v['preco'], 2, ',', '.') ?> EUR</div>
-                <a class="detalhe" href="/veiculo/detalhe/<?= (int) $v['id'] ?>">Ver detalhe</a>
+                <div class="acoes">
+                    <a class="detalhe" href="<?= htmlspecialchars(app_url('veiculo/detalhe/' . (int) $v['id'])) ?>">Ver detalhe</a>
+                    <form method="POST" action="<?= htmlspecialchars(app_url('carrinho/adicionar')) ?>" style="margin:0;">
+                        <input type="hidden" name="veiculo_id" value="<?= (int) $v['id'] ?>">
+                        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(csrf_token()) ?>">
+                        <button class="adicionar" type="submit">Adicionar ao carrinho</button>
+                    </form>
+                </div>
             </div>
         </div>
     <?php endforeach ?>
