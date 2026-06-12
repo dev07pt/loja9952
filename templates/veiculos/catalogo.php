@@ -16,10 +16,14 @@
         .card-body { padding:14px; }
         .card-body h3 { margin:0 0 6px; font-size:1rem; color:#1A237E; }
         .preco { font-size:1.3rem; font-weight:bold; color:#1565C0; }
+        .estado { display:inline-block; margin-top:8px; padding:5px 10px; border-radius:999px; font-size:.8rem; font-weight:bold; }
+        .estado.disponivel { background:#e8f5e9; color:#2e7d32; }
+        .estado.reservado { background:#ffebee; color:#c62828; }
         .detalhe { display:inline-block; margin-top:10px; background:#1565C0; color:#fff;
                    padding:7px 14px; border-radius:4px; text-decoration:none; font-size:.9rem; }
         .adicionar { display:inline-block; margin-top:10px; background:#2e7d32; color:#fff;
                      padding:7px 14px; border:none; border-radius:4px; cursor:pointer; font-size:.9rem; }
+        .adicionar[disabled] { background:#9e9e9e; cursor:not-allowed; }
         .acoes { display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-top:6px; }
         .topo { display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap; }
         .carrinho-link { color:#1565C0; text-decoration:none; font-weight:bold; }
@@ -66,18 +70,25 @@
     <div class="grelha">
     <?php foreach ($veiculos as $v): ?>
         <div class="card">
-            <img src="<?= !empty($v['imagem']) ? app_url('uploads/' . $v['imagem']) : app_url('img/placeholder.png') ?>"
+            <img src="<?= htmlspecialchars(imagem_url($v['imagem'] ?? null)) ?>"
+                 onerror="this.onerror=null;this.src='<?= htmlspecialchars(imagem_placeholder_svg()) ?>';"
                  alt="<?= htmlspecialchars($v['marca'] . ' ' . $v['modelo']) ?>">
             <div class="card-body">
                 <h3><?= htmlspecialchars($v['marca'] . ' ' . $v['modelo']) ?></h3>
                 <p><?= (int) $v['ano'] ?> | <?= number_format((float) $v['quilometros'], 0, '.', '.') ?> km | <?= htmlspecialchars($v['combustivel']) ?></p>
                 <div class="preco"><?= number_format((float) $v['preco'], 2, ',', '.') ?> EUR</div>
+                <?php $disponivel = (int) ($v['disponivel'] ?? 1) === 1; ?>
+                <div class="estado <?= $disponivel ? 'disponivel' : 'reservado' ?>">
+                    <?= $disponivel ? 'Disponível' : 'Reservado' ?>
+                </div>
                 <div class="acoes">
                     <a class="detalhe" href="<?= htmlspecialchars(app_url('veiculo/detalhe/' . (int) $v['id'])) ?>">Ver detalhe</a>
                     <form method="POST" action="<?= htmlspecialchars(app_url('carrinho/adicionar')) ?>" style="margin:0;">
                         <input type="hidden" name="veiculo_id" value="<?= (int) $v['id'] ?>">
                         <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(csrf_token()) ?>">
-                        <button class="adicionar" type="submit">Adicionar ao carrinho</button>
+                        <button class="adicionar" type="submit" <?= $disponivel ? '' : 'disabled' ?>>
+                            <?= $disponivel ? 'Adicionar ao carrinho' : 'Reservado' ?>
+                        </button>
                     </form>
                 </div>
             </div>

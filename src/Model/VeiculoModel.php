@@ -15,7 +15,7 @@ class VeiculoModel {
     public function listar(array $filtros = []): array {
         $sql    = 'SELECT v.*, m.nome AS marca FROM veiculos v
                    JOIN marcas m ON m.id = v.marca_id
-                   WHERE v.disponivel = 1';
+                   WHERE 1=1';
         $params = [];
  
         if (!empty($filtros['marca_id'])) {
@@ -57,5 +57,29 @@ class VeiculoModel {
  
     public function getMarcas(): array {
         return $this->db->query('SELECT * FROM marcas ORDER BY nome')->fetchAll();
+    }
+
+    public function criar(array $dados): int {
+        $stmt = $this->db->prepare(
+            'INSERT INTO veiculos
+                (marca_id, modelo, ano, quilometros, combustivel, cilindrada, preco, descricao, imagem, disponivel)
+             VALUES
+                (:marca_id, :modelo, :ano, :quilometros, :combustivel, :cilindrada, :preco, :descricao, :imagem, :disponivel)'
+        );
+
+        $stmt->execute([
+            ':marca_id' => $dados['marca_id'],
+            ':modelo' => $dados['modelo'],
+            ':ano' => $dados['ano'],
+            ':quilometros' => $dados['quilometros'],
+            ':combustivel' => $dados['combustivel'],
+            ':cilindrada' => $dados['cilindrada'],
+            ':preco' => $dados['preco'],
+            ':descricao' => $dados['descricao'],
+            ':imagem' => $dados['imagem'],
+            ':disponivel' => $dados['disponivel'] ?? 1,
+        ]);
+
+        return (int) $this->db->lastInsertId();
     }
 }

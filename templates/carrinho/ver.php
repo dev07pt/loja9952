@@ -17,7 +17,7 @@
         .preco { font-size: 1.15rem; font-weight: bold; color: #1565C0; margin: 0; }
         .acoes { display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
         .remover { background: #c62828; color: #fff; border: none; border-radius: 6px; padding: 10px 14px; cursor: pointer; }
-        .prosseguir { background: #b0bec5; color: #fff; border: none; border-radius: 6px; padding: 12px 18px; cursor: not-allowed; opacity: .8; }
+        .prosseguir { display: inline-flex; align-items: center; justify-content: center; background: #1565C0; color: #fff; border: none; border-radius: 6px; padding: 12px 18px; text-decoration: none; font-weight: bold; }
         .vazio { border: 1px dashed #cfd8dc; border-radius: 10px; padding: 30px; text-align: center; background: #fafcfd; color: #607d8b; }
         .rodape { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-top: 24px; }
         @media (max-width: 700px) {
@@ -50,7 +50,8 @@
             <?php foreach ($veiculos as $veiculo): ?>
                 <div class="item">
                     <img class="thumb"
-                         src="<?= !empty($veiculo['imagem']) ? app_url('uploads/' . $veiculo['imagem']) : app_url('img/placeholder.png') ?>"
+                         src="<?= htmlspecialchars(imagem_url($veiculo['imagem'] ?? null)) ?>"
+                         onerror="this.onerror=null;this.src='<?= htmlspecialchars(imagem_placeholder_svg()) ?>';"
                          alt="<?= htmlspecialchars(($veiculo['marca'] ?? '') . ' ' . ($veiculo['modelo'] ?? '')) ?>">
 
                     <div>
@@ -72,7 +73,7 @@
 
         <div class="rodape">
             <div class="resumo">Veiculos na lista: <?= $totalVeiculos ?></div>
-            <button class="prosseguir" type="button" disabled>Prosseguir</button>
+            <a class="prosseguir" href="<?= htmlspecialchars(app_url('checkout')) ?>">Prosseguir</a>
         </div>
     <?php endif ?>
 </body>

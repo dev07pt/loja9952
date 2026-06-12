@@ -9,6 +9,9 @@ foreach ($env as $k => $v) {
  
 use App\Controller\VeiculoController;
 use App\Controller\CarrinhoController;
+use App\Controller\CheckoutController;
+use App\Controller\AuthController;
+use App\Controller\ContaController;
  
 $requestPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ?? '/';
 $scriptName = str_replace('\\', '/', $_SERVER['SCRIPT_NAME'] ?? '');
@@ -31,12 +34,22 @@ $id      = (int)($partes[2] ?? 0);
  
 $ctrl = new VeiculoController();
 $carrinhoCtrl = new CarrinhoController();
+$checkoutCtrl = new CheckoutController();
+$authCtrl = new AuthController();
+$contaCtrl = new ContaController();
  
 match("$recurso/$acao") {
     ''           => $ctrl->catalogo(),
     'veiculo/detalhe' => $ctrl->detalhe($id),
+    'veiculo/cadastrar' => $ctrl->cadastrar(),
     'carrinho/'       => $carrinhoCtrl->ver(),
     'carrinho/adicionar' => $carrinhoCtrl->adicionar(),
     'carrinho/remover'   => $carrinhoCtrl->remover(),
+    'checkout/'      => $checkoutCtrl->ver(),
+    'checkout/confirmar' => $checkoutCtrl->confirmar(),
+    'conta/'         => $contaCtrl->ver(),
+    'login/'         => $authCtrl->login(),
+    'registar/'      => $authCtrl->registar(),
+    'logout/'        => $authCtrl->logout(),
     default      => $ctrl->catalogo(),
 };

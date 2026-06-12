@@ -12,6 +12,7 @@ $total_carrinho = count($_SESSION['carrinho'] ?? []);
         <a href="<?= htmlspecialchars(app_url('carrinho')) ?>" style="color:#fff;text-decoration:none;">
             🛒 Lista (<?= $total_carrinho ?>)
         </a>
+        <a href="<?= htmlspecialchars(app_url('veiculo/cadastrar')) ?>" style="color:#fff;text-decoration:none;">Cadastrar carro</a>
         <?php if ($_SESSION['logado'] ?? false): ?>
             <a href="<?= htmlspecialchars(app_url('conta')) ?>" style="color:#fff;text-decoration:none;">A minha conta</a>
             <a href="<?= htmlspecialchars(app_url('logout')) ?>" style="color:#ccc;text-decoration:none;">Sair</a>
