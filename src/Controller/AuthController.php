@@ -21,11 +21,11 @@ class AuthController {
             $pass     = $_POST['password']      ?? '';
             $pass2    = $_POST['password2']     ?? '';
  
-            if (strlen($nome) < 3)              $erros[] = 'Nome demasiado curto (mínimo 3 caracteres).';
-            if (!filter_var($email,FILTER_VALIDATE_EMAIL)) $erros[] = 'Email inválido.';
+            if (strlen($nome) < 3)              $erros[] = 'Nome demasiado curto (mÃ­nimo 3 caracteres).';
+            if (!filter_var($email,FILTER_VALIDATE_EMAIL)) $erros[] = 'Email invÃ¡lido.';
             if (strlen($pass) < 8)              $erros[] = 'A password deve ter pelo menos 8 caracteres.';
-            if ($pass !== $pass2)               $erros[] = 'As passwords não coincidem.';
-            if ($this->model->emailExiste($email)) $erros[] = 'Este email já está registado.';
+            if ($pass !== $pass2)               $erros[] = 'As passwords nÃ£o coincidem.';
+            if ($this->model->emailExiste($email)) $erros[] = 'Este email jÃ¡ estÃ¡ registado.';
  
             if (empty($erros)) {
                 $this->model->criar([
@@ -60,7 +60,7 @@ class AuthController {
             }
             $erro = 'Email ou password incorretos.';
         }
-        $titulo = 'Iniciar sessão';
+        $titulo = 'Iniciar sessÃ£o';
         require __DIR__ . '/../../templates/auth/login.php';
     }
  
