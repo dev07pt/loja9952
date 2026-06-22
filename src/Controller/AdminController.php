@@ -9,7 +9,7 @@ class AdminController {
     private function auth(): void {
         if (session_status() === PHP_SESSION_NONE) session_start();
         if (!($_SESSION['admin_logado'] ?? false)) {
-            header('Location: /admin/login'); exit;
+            header('Location: ' . app_url('admin/login')); exit;
         }
     }
  
@@ -50,7 +50,7 @@ class AdminController {
             if (empty($erros)) {
                 (new VeiculoModel())->criar($dados);
                 $_SESSION['msg_ok'] = 'Veículo adicionado!';
-                header('Location: /admin/veiculos'); exit;
+                header('Location: ' . app_url('admin/veiculos')); exit;
             }
         }
         $titulo = 'Adicionar Veículo';
@@ -155,6 +155,6 @@ class AdminController {
                 $stmt2->execute([':id'=>$id]);
             }
         }
-        header('Location: /admin/reservas'); exit;
+        header('Location: ' . app_url('admin/reservas')); exit;
     }
 }

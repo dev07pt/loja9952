@@ -3,7 +3,7 @@
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
-    <title><?= htmlspecialchars($titulo ?? 'Iniciar sessão') ?></title>
+    <title><?= htmlspecialchars($titulo ?? 'Iniciar sessÃ£o') ?></title>
     <style>
         body { font-family: Arial, sans-serif; max-width: 760px; margin: 0 auto; padding: 20px; color: #222; }
         .card { border: 1px solid #ddd; border-radius: 12px; padding: 24px; background: #fff; }
@@ -19,7 +19,7 @@
 <body>
     <?php require __DIR__ . '/../header.php'; ?>
     <div class="card">
-        <h1><?= htmlspecialchars($titulo ?? 'Iniciar sessão') ?></h1>
+        <h1><?= htmlspecialchars($titulo ?? 'Iniciar sessÃ£o') ?></h1>
 
         <?php if (!empty($erro)): ?>
             <div class="erro"><?= htmlspecialchars($erro) ?></div>
@@ -40,7 +40,7 @@
 
             <div class="acoes">
                 <button class="btn" type="submit">Entrar</button>
-                <a class="alternar" href="<?= htmlspecialchars(app_url('registar')) ?>">Ainda não tens conta? Registar</a>
+                <a class="alternar" href="<?= htmlspecialchars(app_url('registar')) ?>">Ainda nÃ£o tens conta? Registar</a>
             </div>
         </form>
     </div>

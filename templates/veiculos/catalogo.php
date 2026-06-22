@@ -36,30 +36,34 @@
         <h1>AutoShop - Catalogo de Veiculos</h1>
     </div>
 
-    <form class="filtros" method="GET" action="">
-        <select name="marca_id">
-            <option value="">Todas as marcas</option>
-            <?php foreach ($marcas as $m): ?>
-            <option value="<?= $m['id'] ?>"
-                <?= (($_GET['marca_id'] ?? '') == $m['id']) ? 'selected' : '' ?>>
-                <?= htmlspecialchars($m['nome']) ?>
-            </option>
-            <?php endforeach ?>
-        </select>
-        <select name="combustivel">
-            <option value="">Combustivel</option>
-            <?php foreach (['Gasolina', 'Diesel', 'Eletrico', 'Hibrido'] as $c): ?>
-            <option value="<?= htmlspecialchars($c) ?>" <?= (($_GET['combustivel'] ?? '') === $c) ? 'selected' : '' ?>><?= htmlspecialchars($c) ?></option>
-            <?php endforeach ?>
-        </select>
-        <input type="number" name="preco_max" placeholder="Preco max. (EUR)"
-               value="<?= htmlspecialchars($_GET['preco_max'] ?? '') ?>">
-        <input type="number" name="ano_min" placeholder="Ano minimo"
-               value="<?= htmlspecialchars($_GET['ano_min'] ?? '') ?>">
-        <input type="text" name="pesquisa" placeholder="Pesquisar modelo..."
-               value="<?= htmlspecialchars($_GET['pesquisa'] ?? '') ?>">
-        <button type="submit">Filtrar</button>
-        <a href="<?= htmlspecialchars(app_url('')) ?>" style="padding:8px 14px;color:#555;text-decoration:none;">Limpar</a>
+    <form class="filtros filtros-colapsaveis" method="GET" action="">
+        <input class="filtros-toggle" type="checkbox" id="filtros-toggle">
+        <label class="filtros-trigger" for="filtros-toggle">Filtros</label>
+        <div class="filtros-conteudo">
+            <select name="marca_id">
+                <option value="">Todas as marcas</option>
+                <?php foreach ($marcas as $m): ?>
+                <option value="<?= $m['id'] ?>"
+                    <?= (($_GET['marca_id'] ?? '') == $m['id']) ? 'selected' : '' ?>>
+                    <?= htmlspecialchars($m['nome']) ?>
+                </option>
+                <?php endforeach ?>
+            </select>
+            <select name="combustivel">
+                <option value="">Combustivel</option>
+                <?php foreach (['Gasolina', 'Diesel', 'Eletrico', 'Hibrido'] as $c): ?>
+                <option value="<?= htmlspecialchars($c) ?>" <?= (($_GET['combustivel'] ?? '') === $c) ? 'selected' : '' ?>><?= htmlspecialchars($c) ?></option>
+                <?php endforeach ?>
+            </select>
+            <input type="number" name="preco_max" placeholder="Preco max. (EUR)"
+                   value="<?= htmlspecialchars($_GET['preco_max'] ?? '') ?>">
+            <input type="number" name="ano_min" placeholder="Ano minimo"
+                   value="<?= htmlspecialchars($_GET['ano_min'] ?? '') ?>">
+            <input type="text" name="pesquisa" placeholder="Pesquisar modelo..."
+                   value="<?= htmlspecialchars($_GET['pesquisa'] ?? '') ?>">
+            <button type="submit">Filtrar</button>
+            <a href="<?= htmlspecialchars(app_url('')) ?>" style="padding:8px 14px;color:#555;text-decoration:none;">Limpar</a>
+        </div>
     </form>
 
     <p><?= count($veiculos) ?> veiculo(s) encontrado(s)</p>

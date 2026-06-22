@@ -62,7 +62,7 @@
 
             <div class="acoes">
                 <button class="btn" type="submit">Criar conta</button>
-                <a class="alternar" href="<?= htmlspecialchars(app_url('login')) ?>">Já tens conta? Fazer login</a>
+                <a class="alternar" href="<?= htmlspecialchars(app_url('login')) ?>">JÃ¡ tens conta? Fazer login</a>
             </div>
         </form>
     </div>

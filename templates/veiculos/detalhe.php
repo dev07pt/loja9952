@@ -13,7 +13,7 @@
 </head><body>
     <?php require __DIR__ . '/../header.php'; ?>
     <div class="topo">
-        <a href="<?= htmlspecialchars(app_url('')) ?>">← Voltar ao catálogo</a>
+        <a href="<?= htmlspecialchars(app_url('')) ?>">â† Voltar ao catÃ¡logo</a>
     </div>
     <h1><?= htmlspecialchars($veiculo['marca'].' '.$veiculo['modelo']) ?></h1>
 
@@ -25,23 +25,23 @@
         <tr><th>Marca</th>      <td><?= htmlspecialchars($veiculo['marca']) ?></td></tr>
         <tr><th>Modelo</th>     <td><?= htmlspecialchars($veiculo['modelo']) ?></td></tr>
         <tr><th>Ano</th>        <td><?= $veiculo['ano'] ?></td></tr>
-        <tr><th>Quilómetros</th><td><?= number_format($veiculo['quilometros'],0,'.','.') ?> km</td></tr>
-        <tr><th>Combustível</th><td><?= htmlspecialchars($veiculo['combustivel']) ?></td></tr>
+        <tr><th>QuilÃ³metros</th><td><?= number_format($veiculo['quilometros'],0,'.','.') ?> km</td></tr>
+        <tr><th>CombustÃ­vel</th><td><?= htmlspecialchars($veiculo['combustivel']) ?></td></tr>
         <tr><th>Estado</th>
             <td>
                 <span class="estado <?= ((int) ($veiculo['disponivel'] ?? 1) === 1) ? 'disponivel' : 'reservado' ?>">
-                    <?= ((int) ($veiculo['disponivel'] ?? 1) === 1) ? 'Disponível' : 'Reservado' ?>
+                    <?= ((int) ($veiculo['disponivel'] ?? 1) === 1) ? 'DisponÃ­vel' : 'Reservado' ?>
                 </span>
             </td>
         </tr>
         <?php if($veiculo['cilindrada']): ?>
         <tr><th>Cilindrada</th><td><?= htmlspecialchars($veiculo['cilindrada']) ?></td></tr>
         <?php endif ?>
-        <tr><th>Preço</th>      <td><strong><?= number_format($veiculo['preco'],2,',','.') ?> €</strong></td></tr>
+        <tr><th>PreÃ§o</th>      <td><strong><?= number_format($veiculo['preco'],2,',','.') ?> â‚¬</strong></td></tr>
     </table>
 
     <?php if ($veiculo['descricao']): ?>
-        <h3>Descrição</h3>
+        <h3>DescriÃ§Ã£o</h3>
         <p><?= nl2br(htmlspecialchars($veiculo['descricao'])) ?></p>
     <?php endif ?>
 
@@ -49,7 +49,7 @@
         <input type="hidden" name="veiculo_id" value="<?= $veiculo['id'] ?>">
         <input type="hidden" name="csrf_token" value="<?= csrf_token() ?>">
         <button type="submit" <?= ((int) ($veiculo['disponivel'] ?? 1) === 1) ? '' : 'disabled' ?>>
-            <?= ((int) ($veiculo['disponivel'] ?? 1) === 1) ? '🛒 Adicionar à lista de reservas' : 'Reservado' ?>
+            <?= ((int) ($veiculo['disponivel'] ?? 1) === 1) ? 'ðŸ›’ Adicionar Ã  lista de reservas' : 'Reservado' ?>
         </button>
     </form>
 </body></html>

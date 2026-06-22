@@ -93,6 +93,18 @@
             font-size: 0.9rem;
             font-weight: 700;
         }
+        .estado.pendente {
+            background: #fff8db;
+            color: #9a6b00;
+        }
+        .estado.confirmada {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        .estado.cancelada {
+            background: #ffebee;
+            color: #c62828;
+        }
     </style>
 </head>
 <body>
@@ -124,8 +136,11 @@
                                 <td><?= htmlspecialchars((string) ($reserva['id'] ?? '')) ?></td>
                                 <td><?= htmlspecialchars((string) ($reserva['cliente_nome'] ?? $reserva['cliente'] ?? '')) ?></td>
                                 <td><?= htmlspecialchars((string) ($reserva['veiculo_nome'] ?? $reserva['veiculo'] ?? '')) ?></td>
+                                <?php $estadoReserva = strtolower((string) ($reserva['estado'] ?? '')); ?>
                                 <td>
-                                    <span class="estado"><?= htmlspecialchars((string) ($reserva['estado'] ?? '')) ?></span>
+                                    <span class="estado <?= htmlspecialchars($estadoReserva) ?>">
+                                        <?= htmlspecialchars((string) ($reserva['estado'] ?? '')) ?>
+                                    </span>
                                 </td>
                                 <td><?= htmlspecialchars((string) ($reserva['data'] ?? $reserva['created_at'] ?? '')) ?></td>
                                 <td>

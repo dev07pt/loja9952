@@ -39,6 +39,10 @@ if (!function_exists('app_url')) {
         $basePath = rtrim(str_replace('\\', '/', dirname($scriptName)), '/');
         $basePath = $basePath === '/' ? '' : $basePath;
 
+        if (str_ends_with($basePath, '/public')) {
+            $basePath = substr($basePath, 0, -strlen('/public'));
+        }
+
         $path = '/' . ltrim($path, '/');
 
         if (str_starts_with($path, '/uploads/')) {
@@ -46,13 +50,11 @@ if (!function_exists('app_url')) {
             return $basePath . '/imagem.php?f=' . rawurlencode($ficheiro);
         }
 
-        $frontController = $basePath . '/index.php';
-
         if ($path === '/') {
-            return $frontController . '/';
+            return $basePath . '/';
         }
 
-        return $frontController . $path;
+        return $basePath . $path;
     }
 }
 
