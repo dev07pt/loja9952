@@ -1,16 +1,16 @@
 <?php
 namespace App\Controller;
- 
+
 use App\Model\ClienteModel;
- 
+
 class AuthController {
     private ClienteModel $model;
- 
+
     public function __construct() {
         if (session_status() === PHP_SESSION_NONE) session_start();
         $this->model = new ClienteModel();
     }
- 
+
     public function registar(): void {
         $erros = [];
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -20,13 +20,13 @@ class AuthController {
             $tel      = trim($_POST['telefone'] ?? '');
             $pass     = $_POST['password']      ?? '';
             $pass2    = $_POST['password2']     ?? '';
- 
-            if (strlen($nome) < 3)              $erros[] = 'Nome demasiado curto (mÃ­nimo 3 caracteres).';
-            if (!filter_var($email,FILTER_VALIDATE_EMAIL)) $erros[] = 'Email invÃ¡lido.';
+
+            if (strlen($nome) < 3)              $erros[] = 'Nome demasiado curto (mínimo 3 caracteres).';
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) $erros[] = 'Email inválido.';
             if (strlen($pass) < 8)              $erros[] = 'A password deve ter pelo menos 8 caracteres.';
-            if ($pass !== $pass2)               $erros[] = 'As passwords nÃ£o coincidem.';
-            if ($this->model->emailExiste($email)) $erros[] = 'Este email jÃ¡ estÃ¡ registado.';
- 
+            if ($pass !== $pass2)               $erros[] = 'As passwords não coincidem.';
+            if ($this->model->emailExiste($email)) $erros[] = 'Este email já está registado.';
+
             if (empty($erros)) {
                 $this->model->criar([
                     ':nome'     => $nome,
@@ -42,28 +42,54 @@ class AuthController {
         $titulo = 'Criar conta';
         require __DIR__ . '/../../templates/auth/registar.php';
     }
- 
+
     public function login(): void {
         $erro = '';
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             csrf_validar();
-            $email = trim($_POST['email']    ?? '');
+            $email = trim($_POST['email'] ?? '');
             $pass  = $_POST['password'] ?? '';
             $cliente = $this->model->getByEmail($email);
             if ($cliente && password_verify($pass, $cliente['password'])) {
                 session_regenerate_id(true);
-                $_SESSION['logado']      = true;
-                $_SESSION['cliente_id']  = $cliente['id'];
-                $_SESSION['cliente_nome']= $cliente['nome'];
+                $_SESSION['logado'] = true;
+                $_SESSION['cliente_id'] = $cliente['id'];
+                $_SESSION['cliente_nome'] = $cliente['nome'];
                 header('Location: ' . app_url(''));
                 exit;
             }
             $erro = 'Email ou password incorretos.';
         }
-        $titulo = 'Iniciar sessÃ£o';
+        $titulo = 'Iniciar sessão';
         require __DIR__ . '/../../templates/auth/login.php';
     }
- 
+
+    public function adminLogin(): void {
+        $erro = '';
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            csrf_validar();
+
+            $email = trim($_POST['email'] ?? '');
+            $pass = $_POST['password'] ?? '';
+
+            $adminEmail = $_ENV['ADMIN_EMAIL'] ?? 'admin@autoshop.local';
+            $adminPass = $_ENV['ADMIN_PASSWORD'] ?? 'admin123';
+
+            if ($email === $adminEmail && hash_equals($adminPass, $pass)) {
+                session_regenerate_id(true);
+                $_SESSION['admin_logado'] = true;
+                $_SESSION['admin_email'] = $adminEmail;
+                header('Location: ' . app_url('admin/'));
+                exit;
+            }
+
+            $erro = 'Credenciais de administrador inválidas.';
+        }
+
+        $titulo = 'Iniciar sessão de administrador';
+        require __DIR__ . '/../../templates/admin/login.php';
+    }
+
     public function logout(): void {
         session_destroy();
         session_unset();

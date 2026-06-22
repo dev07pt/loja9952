@@ -32,6 +32,7 @@ $partes = explode('/', $uri);
 $recurso = $partes[0] ?? '';
 $acao    = $partes[1] ?? '';
 $id      = (int)($partes[2] ?? 0);
+$rota    = $recurso . '/' . $acao;
 
 $ctrl = new VeiculoController();
 $carrinhoCtrl = new CarrinhoController();
@@ -40,7 +41,7 @@ $authCtrl = new AuthController();
 $contaCtrl = new ContaController();
 $adminCtrl = new AdminController();
 
-match("$recurso/$acao") {
+match($rota) {
     '' => $ctrl->catalogo(),
     'veiculo/detalhe' => $ctrl->detalhe($id),
     'veiculo/cadastrar' => $ctrl->cadastrar(),
@@ -51,12 +52,18 @@ match("$recurso/$acao") {
     'checkout/confirmar' => $checkoutCtrl->confirmar(),
     'conta/' => $contaCtrl->ver(),
     'login/' => $authCtrl->login(),
+    'admin' => $adminCtrl->dashboard(),
     'admin/' => $adminCtrl->dashboard(),
     'admin/login' => $authCtrl->adminLogin(),
+    'admin/login/' => $authCtrl->adminLogin(),
     'admin/veiculos' => $adminCtrl->veiculosLista(),
+    'admin/veiculos/' => $adminCtrl->veiculosLista(),
     'admin/veiculos/criar' => $adminCtrl->veiculoCriar(),
+    'admin/veiculos/criar/' => $adminCtrl->veiculoCriar(),
     'admin/reservas' => $adminCtrl->reservasLista(),
+    'admin/reservas/' => $adminCtrl->reservasLista(),
     'admin/reservas/estado' => $adminCtrl->reservaEstado(),
+    'admin/reservas/estado/' => $adminCtrl->reservaEstado(),
     'registar/' => $authCtrl->registar(),
     'logout/' => $authCtrl->logout(),
     default => $ctrl->catalogo(),
